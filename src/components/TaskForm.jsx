@@ -6,6 +6,7 @@ import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import appFirebase from '../firebase';
 import { getFirestore, collection, addDoc, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import Select from './Select';
+import Swal from 'sweetalert2'
 
 const db = getFirestore(appFirebase);
 
@@ -98,6 +99,11 @@ const TaskForm = () => {
 
     const submitData = async (data) => {
         if (!editting) {
+            Swal.fire({
+                title: 'Task created succesfully',
+                timer: 2000,
+                icon: 'success'
+            })
             data = {
                 title: data.projectName,
                 description: data.description,
@@ -115,6 +121,11 @@ const TaskForm = () => {
                 console.log(err)
             }
         } else {
+            Swal.fire({
+                title: 'Task edited succesfully',
+                timer: 2000,
+                icon: 'success'
+            })
             data = {
                 title: data.projectName,
                 description: data.description,
