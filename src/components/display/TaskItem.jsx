@@ -21,7 +21,7 @@ const TaskItem = ({ t }) => {
             <td><Avatar user={t.assigned_to} />{' '}{t.assigned_to}</td>
             <td>
                 <div className='row-centered'>
-                    <span className='status border bg-light p-1'>
+                    <span className='status border bg-light py-1 px-2 rounded'>
                         {t.status}
                     </span>
                 </div>
