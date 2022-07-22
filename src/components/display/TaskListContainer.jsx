@@ -7,7 +7,8 @@ import {
     deleteDoc 
 } from 'firebase/firestore';
 import {
-    Container
+    Container,
+    Spinner
 } from 'react-bootstrap';
 import TaskList from "./TaskList";
 
@@ -40,10 +41,16 @@ const TaskListContainer = () => {
     //console.log(list)
 
     return (
-        <div className="bg-light pt-5">
-            <Container className="border bg-white shadow px-0">
-                <TaskList list={list} />
-            </Container>
+        <div className="bg-light pt-5 list-container">
+                {list.length===0 ?
+                    <div className="d-flex justify-content-center align-items-center mt-3">
+                        <Spinner animation="border" />
+                    </div>
+                :
+                    <Container className="border bg-white shadow px-0">
+                            <TaskList list={list} />
+                    </Container>
+                }
         </div>
     );
 };

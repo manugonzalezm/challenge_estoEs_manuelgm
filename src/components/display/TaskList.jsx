@@ -14,7 +14,7 @@ const TaskList = (props) => {
         <Table>
             <thead className="bg-light">
                 <tr>
-                    <th>Project info</th>
+                    <th className='task-table-first-column'>Project info</th>
                     <th>Project Manager</th>
                     <th>Assigned to</th>
                     <th>Status</th>
@@ -24,7 +24,7 @@ const TaskList = (props) => {
             <tbody>
                 {list.map(t => (
                     <tr key={t.id}>
-                        <td>{t.title}</td>
+                        <td className='task-table-first-column'>{t.title}</td>
                         <td>{t.project_manager}</td>
                         <td>{t.assigned_to}</td>
                         <td>{t.status}</td>
