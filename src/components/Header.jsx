@@ -1,7 +1,12 @@
 import React from 'react';
 import{ Navbar, Container, Button } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import logo from '../assets/images/logo.png'; 
+import logo from '../assets/images/logo.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+    faPlus, 
+    faArrowLeft
+} from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
     let location = useLocation();
@@ -27,26 +32,33 @@ const Header = () => {
                             My projects
                         </Navbar.Brand>
                     : (
-                        location.pathname==="/tasks" ?
+                        location.pathname==="/tasks/new" ?
                             <div className='d-flex justify-content-center'>
-                                <Button variant="outline-light" className="text-secondary">ICONO Back</Button>
+                                <Button variant="outline-light" className="text-secondary">
+                                    <FontAwesomeIcon icon={faArrowLeft} /> Back
+                                </Button>
                                 <Navbar.Brand>
                                     Add project
                                 </Navbar.Brand>
                             </div>
                         :
                             <div className='d-flex justify-content-center'>
-                                <Button variant="outline-light" className="text-secondary">ICONO Back</Button>
+                                <Button variant="outline-light" className="text-secondary">
+                                    <FontAwesomeIcon icon={faArrowLeft} /> Back
+                                </Button>
                                 <Navbar.Brand >
                                     Edit project
                                 </Navbar.Brand>
                             </div>
                     )
                     }
-                    
-                    <Button variant="danger">
-                        + Add project
-                    </Button>
+                    {location.pathname==="/" ?
+                        <Button variant="danger">
+                            <FontAwesomeIcon icon={faPlus} /> Add project
+                        </Button>
+                    : 
+                        <></>
+                    }
                 </Container>
             </Navbar>
         </>

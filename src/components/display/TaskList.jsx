@@ -4,6 +4,10 @@ import {
     Table,
     Button
 } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+    faEllipsisVertical
+} from '@fortawesome/free-solid-svg-icons'
 
 const TaskList = (props) => {
     const tasks = useSelector((state) => state.tasks)
@@ -30,7 +34,7 @@ const TaskList = (props) => {
                         <td>{t.status}</td>
                         <td>
                             <Button variant="outline-light" className="text-dark">
-                                Icon ...
+                                <FontAwesomeIcon icon={faEllipsisVertical} />
                             </Button>
                         </td>
                     </tr>
