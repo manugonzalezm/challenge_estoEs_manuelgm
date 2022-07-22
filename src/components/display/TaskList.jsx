@@ -5,12 +5,7 @@ import {
     Table,
     Button
 } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faEllipsisVertical
-} from '@fortawesome/free-solid-svg-icons'
-import ListDropdown from './ListDropdown';
-import Avatar from './Avatar';
+import TaskItem from './TaskItem';
 
 const TaskList = (props) => {
     const tasks = useSelector((state) => state.tasks)
@@ -30,18 +25,7 @@ const TaskList = (props) => {
             </thead>
             <tbody>
                 {list.map(t => (
-                    <tr key={t.id}>
-                        <td className='task-table-first-column'>{t.title}</td>
-                        <td><Avatar user={t.project_manager} />{t.project_manager}</td>
-                        <td><Avatar user={t.assigned_to} />{t.assigned_to}</td>
-                        <td>{t.status}</td>
-                        <td>
-                            <ListDropdown taskId={t.id}/>
-                            {/* <Button variant="outline-light" className="text-dark">
-                                <FontAwesomeIcon icon={faEllipsisVertical} />
-                            </Button> */}
-                        </td>
-                    </tr>
+                    <TaskItem key={t.id} t={t} />
                 ))}
             </tbody>
         </Table>
