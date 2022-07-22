@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { 
     getFirestore, 
     collection, 
@@ -7,18 +7,26 @@ import {
 } from 'firebase/firestore';
 import {
     Container,
-    Spinner
+    Spinner,
+    Button,
+    Alert
 } from 'react-bootstrap';
 import TaskList from "./TaskList";
+import { addTask, setTaskList } from "../../features/tasks/tasksSlice";
 
 import appFirebase from '../../firebase';
 const db = getFirestore(appFirebase)
 
 const TaskListContainer = () => {
-    const [list, setList] = useState([])
+    const dispatch = useDispatch()
+
+    const tasks = useSelector((state) => state.tasks)
+    const { taskList } = tasks
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const getList = async () => {
+            setLoading(true)
             try {
                 const querySnapshot = await getDocs(collection(db, "tasks"))
                 const docs = []
@@ -26,28 +34,33 @@ const TaskListContainer = () => {
                     docs.push({ ...doc.data(), id: doc.id })
                 })
 
-                setList(docs)
-                console.log(docs)
+                dispatch(setTaskList(docs))
+                setLoading(false)
             } catch (err) {
                 console.log(err)
             }
         }
 
-        if (list.length === 0) {
-            getList()
+        if (taskList && taskList.length === 0) {
+            getList(dispatch(setTaskList()))
         }
-    }, [list])
-    //console.log(list)
+    }, [taskList])
 
     return (
         <div className="bg-light pt-5 list-container">
-                {list.length===0 ?
+                {loading ?
                     <div className="d-flex justify-content-center align-items-center mt-3">
                         <Spinner animation="border" />
                     </div>
                 :
                     <Container className="border bg-white shadow px-0">
-                            <TaskList list={list} />
+                        {!loading && (taskList && taskList.length===0) ?
+                            <Alert key="light" variant="light">
+                                No tasks found. To create one go to the 'Add project section'
+                            </Alert>
+                        :
+                            <TaskList list={taskList} />
+                        }
                     </Container>
                 }
         </div>

@@ -13,12 +13,31 @@ import {
     faEllipsisVertical
 } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
-import { getFirestore, deleteDoc, doc } from 'firebase/firestore';
+import { getFirestore, deleteDoc, doc, getDocs, collection } from 'firebase/firestore';
 import appFirebase from '../../firebase';
+import { useDispatch } from 'react-redux/es/exports';
+import { setTaskList } from '../../features/tasks/tasksSlice';
 
 const db = getFirestore(appFirebase);
 
 const ListDropdown = ({ taskId }) => {
+    const dispatch = useDispatch()
+
+    const getList = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, "tasks"))
+            const docs = []
+            querySnapshot.forEach((doc) => {
+                docs.push({ ...doc.data(), id: doc.id })
+            })
+
+            dispatch(setTaskList(docs))
+            // console.log("redux", docs)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const deleteTask = async (id) => {
         Swal.fire({
             icon: 'warning',
@@ -31,6 +50,7 @@ const ListDropdown = ({ taskId }) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 deleteDoc(doc(db, "tasks", id))
+                getList()
                 Swal.fire('Task deleted!', '', 'success')
             }
         })

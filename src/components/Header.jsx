@@ -7,6 +7,7 @@ import {
     faPlus, 
     faArrowLeft
 } from '@fortawesome/free-solid-svg-icons'
+import SearchBar from './SearchBar';
 
 const Header = () => {
     let location = useLocation();
@@ -25,6 +26,7 @@ const Header = () => {
                             />
                         </Link>
                     </Navbar.Brand>
+                    <SearchBar />
                 </Container>
             </Navbar>
             <Navbar className="border-bottom">
@@ -35,7 +37,7 @@ const Header = () => {
                         </Navbar.Brand>
                     : (
                         location.pathname==="/tasks/new" ?
-                            <div className='d-flex justify-content-center'>
+                            <div className='d-flex justify-content-center align-items-center'>
                                 <Link to="/">
                                     <Button variant="outline-light" className="text-secondary">
                                         <FontAwesomeIcon icon={faArrowLeft} /> Back
@@ -46,7 +48,7 @@ const Header = () => {
                                 </Navbar.Brand>
                             </div>
                         :
-                            <div className='d-flex justify-content-center'>
+                            <div className='d-flex justify-content-center align-items-center'>
                                 <Link to="/">
                                     <Button variant="outline-light" className="text-secondary">
                                         <FontAwesomeIcon icon={faArrowLeft} /> Back

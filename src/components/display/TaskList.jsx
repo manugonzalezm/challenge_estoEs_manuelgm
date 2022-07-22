@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     Table,
@@ -8,7 +7,6 @@ import {
 import TaskItem from './TaskItem';
 
 const TaskList = (props) => {
-    const tasks = useSelector((state) => state.tasks)
 
     const { list } = props
 
@@ -24,7 +22,7 @@ const TaskList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {list.map(t => (
+                {list && list.map(t => (
                     <TaskItem key={t.id} t={t} />
                 ))}
             </tbody>
