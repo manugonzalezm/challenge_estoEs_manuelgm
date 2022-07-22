@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
     Table,
     Button
@@ -8,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faEllipsisVertical
 } from '@fortawesome/free-solid-svg-icons'
+import ListDropdown from './ListDropdown';
 
 const TaskList = (props) => {
     const tasks = useSelector((state) => state.tasks)
@@ -33,9 +35,10 @@ const TaskList = (props) => {
                         <td>{t.assigned_to}</td>
                         <td>{t.status}</td>
                         <td>
-                            <Button variant="outline-light" className="text-dark">
+                            <ListDropdown taskId={t.id}/>
+                            {/* <Button variant="outline-light" className="text-dark">
                                 <FontAwesomeIcon icon={faEllipsisVertical} />
-                            </Button>
+                            </Button> */}
                         </td>
                     </tr>
                 ))}
