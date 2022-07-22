@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Container, Button, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import appFirebase from '../firebase';
 import { getFirestore, collection, addDoc, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import Select from './Select';
@@ -11,6 +11,7 @@ const db = getFirestore(appFirebase);
 
 const TaskForm = () => {
     let location = useLocation();
+    let navigate = useNavigate();
     let { taskId } = useParams();
     const [task, setTask] = useState([])
     const [editting, setEditting] = useState(false)
@@ -162,6 +163,7 @@ const TaskForm = () => {
                     onSubmit={(values, { setSubmitting }) => {
                         setTimeout(() => {
                             submitData(values)
+                            navigate("/", { replace: true });
                             setSubmitting(false);
                         }, 400);
                     }}
