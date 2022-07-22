@@ -3,8 +3,7 @@ import { useDispatch } from 'react-redux';
 import { 
     getFirestore, 
     collection, 
-    getDocs, 
-    deleteDoc 
+    getDocs
 } from 'firebase/firestore';
 import {
     Container,

@@ -1,7 +1,7 @@
 import React from 'react';
 import{ Navbar, Container, Button } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
-import logo from '../assets/images/logo.png';
+import { Logo } from '../assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faPlus, 
@@ -19,7 +19,7 @@ const Header = () => {
                     <Navbar.Brand >
                         <Link to="/">
                             <img
-                                src={logo}
+                                src={Logo}
                                 className="d-inline-block align-top"
                                 alt="Estoes logo"
                             />

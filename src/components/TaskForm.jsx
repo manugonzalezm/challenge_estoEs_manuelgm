@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Container, Button } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { Container, Button, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { useLocation, useParams } from 'react-router-dom';
 import appFirebase from '../firebase';
 import { getFirestore, collection, addDoc, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import Select from './Select';
@@ -10,6 +10,11 @@ import Select from './Select';
 const db = getFirestore(appFirebase);
 
 const TaskForm = () => {
+    let location = useLocation();
+    let { taskId } = useParams();
+    const [task, setTask] = useState([])
+    const [editting, setEditting] = useState(false)
+
     const projectManagers = [
         {
             id: 1,
@@ -18,6 +23,10 @@ const TaskForm = () => {
         {
             id: 2,
             value: "Manuel Gonzalez"
+        },
+        {
+            id: 3,
+            value: "Walt Cosani"
         }
     ]
 
@@ -28,7 +37,11 @@ const TaskForm = () => {
         },
         {
             id: 2,
-            value: "Gonzalo Fuentes"
+            value: "Gabriela Fuentes"
+        },
+        {
+            id: 3,
+            value: "Ignacio Truffa"
         }
     ]
 
@@ -43,39 +56,80 @@ const TaskForm = () => {
         }
     ]
 
-    const initialValues = /* location.pathname==="/tasks/new" ?  */
-    {
-        projectName: "",
-        description: "",
-        projectManager: "",
-        assignedTo: "",
-        status: ""
+    const getTask = async () => {
+        try {
+            const docRef = doc(db, "tasks", taskId)
+            const docSnap = await getDoc(docRef)
+            const data = docSnap.data()
+            const parsedData = {
+                projectName: data.title,
+                description: data.description,
+                projectManager: data.project_manager,
+                assignedTo: data.assigned_to,
+                status: data.status,
+                creationDate: data.creation_date
+            }
+            setTask(parsedData)
+        } catch (error) {
+            console.log(error)
+        }
     }
-    /* :
-    {
-        projectName: task.project_name,
-        description: task.description,
-        projectManager: task.project_manager,
-        assignedTo:task.assigned_to,
-        status: task.status
-    } */
+    console.log("task", task)
+
+    useEffect(() => {
+        if (location.pathname !== "tasks/new" && location.pathname !== "/" && taskId) {
+            setEditting(true)
+            getTask(taskId)
+        }
+    }, [taskId])
+
+
+    const initialValues = !editting ?
+        {
+            projectName: "",
+            description: "",
+            projectManager: "",
+            assignedTo: "",
+            status: ""
+        }
+        :
+        task
 
     const submitData = async (data) => {
-        data = {
-            title: data.projectName,
-            description: data.description,
-            project_manager: data.projectManager,
-            assigned_to: data.assignedTo,
-            creation_date: Timestamp.fromDate(new Date()),
-            status: data.status
-        }
-        console.log(data)
-        try {
-            await addDoc(collection(db, "tasks"),{
-                ...data
-            })
-        } catch (err) {
-            console.log(err)
+        if (!editting) {
+            data = {
+                title: data.projectName,
+                description: data.description,
+                project_manager: data.projectManager,
+                assigned_to: data.assignedTo,
+                creation_date: Timestamp.fromDate(new Date()),
+                status: data.status
+            }
+            console.log(data)
+            try {
+                await addDoc(collection(db, "tasks"), {
+                    ...data
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            data = {
+                title: data.projectName,
+                description: data.description,
+                project_manager: data.projectManager,
+                assigned_to: data.assignedTo,
+                creation_date: task.creationDate,
+                status: data.status,
+            }
+            console.log(data)
+            try {
+                await setDoc(doc(db, "tasks", taskId), {
+                    ...data
+                })
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
@@ -97,75 +151,106 @@ const TaskForm = () => {
             .required("Este campo es obligatorio"),
     })
 
-    let location = useLocation();
-
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={formSchema}
-            onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                    submitData(values)
-                    setSubmitting(false);
-                }, 400);
-            }}
-        >
-            {({ errors, touched, isSubmitting }) => (
-                <Container>
-                    <Form>
-                        
-                        <div className="form-group my-3">
-                            <label htmlFor="projectName">Project name</label>
-                            <Field name="projectName" className={'form-control' + (errors.projectName && touched.projectName ? ' is-invalid' : '')} />
-                            {touched.projectName && errors.projectName &&
-                                <div className="form-text text-danger">{errors.projectName}</div>
-                            }
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="description">Description</label>
-                            <Field name="description" className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} />
-                            {touched.description && errors.description &&
-                                <div className="form-text text-danger">{errors.description}</div>
-                            }
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="projectManager">Project manager</label>
-                            <Select
-                                name="projectManager"
-                                options={projectManagers}
-                                error={errors.projectManager}
-                                touched={touched.projectManager}
-                            />
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="assignedTo">Assigned to</label>
-                            <Select
-                                name="assignedTo"
-                                options={employees}
-                                error={errors.assignedTo}
-                                touched={touched.assignedTo}
-                            />
-                        </div>
-                        <div className="form-group mb-3">
-                            <label htmlFor="status">Status</label>
-                            <Select
-                                name="status"
-                                options={statusOptions}
-                                error={errors.status}
-                                touched={touched.status}
-                            />
-                        </div>
-                        <Button 
-                            variant="danger" 
-                            type="submit"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? "Please wait..." : ( location.pathname==="/tasks/new" ? "Create project" : "Save changes")}
-                        </Button> {/* Luego hacer condicional para mostrar Create project o Save Changes */}
-                    </Form>
-                </Container>
-            )}
-        </Formik>
+        <>
+            {(editting && task.length === 0) ?
+                <Spinner animation="border" />
+                :
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={formSchema}
+                    onSubmit={(values, { setSubmitting }) => {
+                        setTimeout(() => {
+                            submitData(values)
+                            setSubmitting(false);
+                        }, 400);
+                    }}
+                >
+                    {({ errors, touched, isSubmitting, values }) => (
+                        <Container>
+                            <Form>
+                                {console.log("values", values)}
+                                <div className="form-group my-3">
+                                    <label htmlFor="projectName">Project name</label>
+                                    <Field name="projectName" className={'form-control' + (errors.projectName && touched.projectName ? ' is-invalid' : '')} />
+                                    {touched.projectName && errors.projectName &&
+                                        <div className="form-text text-danger">{errors.projectName}</div>
+                                    }
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="description">Description</label>
+                                    <Field name="description" className={'form-control' + (errors.description && touched.description ? ' is-invalid' : '')} />
+                                    {touched.description && errors.description &&
+                                        <div className="form-text text-danger">{errors.description}</div>
+                                    }
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="projectManager">Project manager</label>
+                                    <Select
+                                        name="projectManager"
+                                        options={projectManagers}
+                                        error={errors.projectManager}
+                                        touched={touched.projectManager}
+                                    />
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="assignedTo">Assigned to</label>
+                                    <Select
+                                        name="assignedTo"
+                                        options={employees}
+                                        error={errors.assignedTo}
+                                        touched={touched.assignedTo}
+                                    />
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="status">Status</label>
+                                    <Select
+                                        name="status"
+                                        options={statusOptions}
+                                        error={errors.status}
+                                        touched={touched.status}
+                                    />
+                                </div>
+                                {!editting ?
+                                    <Button
+                                        variant="danger"
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? "Please wait..." : "Create project"}
+                                    </Button>
+                                    :
+                                    <OverlayTrigger
+                                        key="right"
+                                        placement="right"
+                                        overlay={
+                                            <Tooltip id="tooltip-edit">
+                                                The data cannot be identical to the existing one
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <span>
+                                            <Button 
+                                                variant="danger"
+                                                type="submit" 
+                                                disabled={isSubmitting || (values.title === task.title &&
+                                                    values.description === task.description &&
+                                                    values.projectManager === task.projectManager &&
+                                                    values.assignedTo === task.assignedTo &&
+                                                    values.status === task.status
+                                                )}
+                                            >
+                                                {isSubmitting ? "Please wait..." : "Save changes"}
+                                            </Button>
+                                        </span>
+                                    </OverlayTrigger>
+                                }
+                            </Form>
+                        </Container>
+                    )}
+                </Formik>
+            }
+        </>
     )
 }
 
