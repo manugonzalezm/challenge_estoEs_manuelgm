@@ -9,7 +9,7 @@ const Paginate = () => {
     const { currentPage, taskList, tasksPerPage } = tasks
     const pages = []
     if(taskList && taskList.length>0){
-        for(let p=0; p<(Math.round((taskList.length)/tasksPerPage)); p++){
+        for(let p=0; p<(Math.ceil((taskList.length)/tasksPerPage)); p++){
             pages.push(p+1)
         }
     }
