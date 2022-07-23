@@ -62,33 +62,31 @@ const TaskForm = () => {
         }
     ]
 
-    const getTask = async () => {
-        try {
-            const docRef = doc(db, "tasks", taskId)
-            const docSnap = await getDoc(docRef)
-            const data = docSnap.data()
-            const parsedData = {
-                projectName: data.title,
-                description: data.description,
-                projectManager: data.project_manager,
-                assignedTo: data.assigned_to,
-                status: data.status,
-                creationDate: data.creation_date
-            }
-            setTask(parsedData)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    console.log("task", task)
-
     useEffect(() => {
+        const getTask = async () => {
+            try {
+                const docRef = doc(db, "tasks", taskId)
+                const docSnap = await getDoc(docRef)
+                const data = docSnap.data()
+                const parsedData = {
+                    projectName: data.title,
+                    description: data.description,
+                    projectManager: data.project_manager,
+                    assignedTo: data.assigned_to,
+                    status: data.status,
+                    creationDate: data.creation_date
+                }
+                setTask(parsedData)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
         if (location.pathname !== "tasks/new" && location.pathname !== "/" && taskId) {
             setEditting(true)
             getTask(taskId)
         }
     }, [taskId])
-
 
     const initialValues = !editting ?
         {
@@ -192,7 +190,6 @@ const TaskForm = () => {
                     {({ errors, touched, isSubmitting, values }) => (
                         <Container>
                             <Form>
-                                {console.log("values", values)}
                                 <div className="form-group my-3">
                                     <label htmlFor="projectName">Project name</label>
                                     <Field name="projectName" className={'form-control' + (errors.projectName && touched.projectName ? ' is-invalid' : '')} />

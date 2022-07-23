@@ -32,7 +32,6 @@ const ListDropdown = ({ taskId, size }) => {
             })
 
             dispatch(setTaskList(docs))
-            // console.log("redux", docs)
         } catch (err) {
             console.log(err)
         }
@@ -47,7 +46,6 @@ const ListDropdown = ({ taskId, size }) => {
             confirmButtonText: 'Delete',
             confirmButtonColor: '#d33',
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 deleteDoc(doc(db, "tasks", id))
                 getList()

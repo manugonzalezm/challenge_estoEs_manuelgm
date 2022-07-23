@@ -6,7 +6,6 @@ import TaskListContainer from './components/display/TaskListContainer';
 import TaskForm from './components/TaskForm';
 
 function App() {
-
   return (
     <BrowserRouter>
       <Header />

@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import {
-    Table,
-    Button
+    Table
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import TaskItem from './TaskItem';

@@ -8,7 +8,6 @@ import {
 import {
     Container,
     Spinner,
-    Button,
     Alert,
     Badge
 } from 'react-bootstrap';
@@ -46,6 +45,7 @@ const TaskListContainer = () => {
 
         if (taskList && taskList.length === 0) {
             getList()
+            dispatch(setPage(1))
         }
     }, [taskList])
 
@@ -70,8 +70,6 @@ const TaskListContainer = () => {
         dispatch(setPage(1))
         getList();
     }
-
-    console.log(filterKeyword)
 
     return (
         <div className="bg-light pt-4 list-container">

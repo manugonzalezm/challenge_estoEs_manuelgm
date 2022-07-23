@@ -12,23 +12,10 @@ export const tasksSlice = createSlice({
     initialState,
     reducers: {
         setTaskList: (state, action) => {
-            console.log(action.payload)
             return({
                 ...state,
                 taskList: action.payload
             })
-        },
-        addTask: (state, action) => {
-            return({
-                ...state,
-                taskList: [...state.taskList, action.payload]
-            })
-        },
-        editTask: (state, action) => {
-
-        },
-        deleteTask: (state, action) => {
-
         },
         setFilterKeyword: (state, action) => {
             return({
@@ -45,6 +32,6 @@ export const tasksSlice = createSlice({
     }
 })
 
-export const { setTaskList, addTask, editTask, deleteTask, setPage, setFilterKeyword } = tasksSlice.actions
+export const { setTaskList, setPage, setFilterKeyword } = tasksSlice.actions
 
 export default tasksSlice.reducer
