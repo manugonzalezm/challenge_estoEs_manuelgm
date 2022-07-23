@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     taskList: [],
     filterKeyword: "",
+    currentPage: 1,
+    tasksPerPage: 1
 }
 
 export const tasksSlice = createSlice({
@@ -27,10 +29,22 @@ export const tasksSlice = createSlice({
         },
         deleteTask: (state, action) => {
 
+        },
+        setFilterKeyword: (state, action) => {
+            return({
+                ...state,
+                filterKeyword: action.payload
+            })
+        },
+        setPage: (state, action) => {
+            return({
+                ...state,
+                currentPage: action.payload
+            })
         }
     }
 })
 
-export const { setTaskList, addTask, editTask, deleteTask } = tasksSlice.actions
+export const { setTaskList, addTask, editTask, deleteTask, setPage, setFilterKeyword } = tasksSlice.actions
 
 export default tasksSlice.reducer

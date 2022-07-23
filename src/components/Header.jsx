@@ -1,6 +1,6 @@
 import React from 'react';
 import{ Navbar, Container, Button } from 'react-bootstrap';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Logo } from '../assets/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -8,17 +8,45 @@ import {
     faArrowLeft
 } from '@fortawesome/free-solid-svg-icons'
 import SearchBar from './SearchBar';
+import { useDispatch } from 'react-redux';
+import { setFilterKeyword, setPage, setTaskList } from '../features/tasks/tasksSlice';
+import { getDocs, collection, getFirestore } from 'firebase/firestore';
+import appFirebase from '../firebase';
+
+const db = getFirestore(appFirebase)
 
 const Header = () => {
     let location = useLocation();
-    console.log(location)
+    let navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const getList = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, "tasks"))
+            const docs = []
+            querySnapshot.forEach((doc) => {
+                docs.push({ ...doc.data(), id: doc.id })
+            })
+
+            dispatch(setTaskList(docs))
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleClickLogo = () => {
+        dispatch(setPage(1));
+        dispatch(setFilterKeyword(""));
+        getList();
+        navigate("/", { replace: true })
+    }
 
     return (
         <>
             <Navbar className="border-bottom">
                 <Container>
-                    <Navbar.Brand >
-                        <Link to="/">
+                    <Navbar.Brand onClick={handleClickLogo}>
+                        <Link to="/" >
                             <img
                                 src={Logo}
                                 className="d-inline-block align-top"

@@ -5,12 +5,16 @@ import { Container, Button, Spinner, OverlayTrigger, Tooltip } from 'react-boots
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import appFirebase from '../firebase';
 import { getFirestore, collection, addDoc, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { setFilterKeyword, setPage } from "../features/tasks/tasksSlice";
+
 import Select from './Select';
 import Swal from 'sweetalert2'
 
 const db = getFirestore(appFirebase);
 
 const TaskForm = () => {
+    const dispatch = useDispatch();
     let location = useLocation();
     let navigate = useNavigate();
     let { taskId } = useParams();
@@ -97,6 +101,11 @@ const TaskForm = () => {
         :
         task
 
+    const handleResetList = () => {
+        dispatch(setFilterKeyword(""))
+        dispatch(setPage(1))
+    }
+
     const submitData = async (data) => {
         if (!editting) {
             Swal.fire({
@@ -112,7 +121,6 @@ const TaskForm = () => {
                 creation_date: Timestamp.fromDate(new Date()),
                 status: data.status
             }
-            console.log(data)
             try {
                 await addDoc(collection(db, "tasks"), {
                     ...data
@@ -134,7 +142,6 @@ const TaskForm = () => {
                 creation_date: task.creationDate,
                 status: data.status,
             }
-            console.log(data)
             try {
                 await setDoc(doc(db, "tasks", taskId), {
                     ...data
@@ -166,13 +173,16 @@ const TaskForm = () => {
     return (
         <>
             {(editting && task.length === 0) ?
-                <Spinner animation="border" />
-                :
+                <div className='mt-5 d-flex justify-content-center align-items-center'>
+                    <Spinner animation="border" />
+                </div>
+            :
                 <Formik
                     initialValues={initialValues}
                     validationSchema={formSchema}
                     onSubmit={(values, { setSubmitting }) => {
                         setTimeout(() => {
+                            handleResetList()
                             submitData(values)
                             navigate("/", { replace: true });
                             setSubmitting(false);

@@ -11,7 +11,7 @@ import {
     faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
-import { setTaskList } from '../features/tasks/tasksSlice';
+import { setTaskList, setPage, setFilterKeyword } from '../features/tasks/tasksSlice';
 import Swal from 'sweetalert2';
 
 const db = getFirestore(appFirebase)
@@ -51,10 +51,14 @@ const SearchBar = () => {
                 tasks.push({ ...doc.data(), id: doc.id })
             })
             if(tasks.length>0){
+                dispatch(setFilterKeyword(search))
                 dispatch(setTaskList(tasks))
+                dispatch(setPage(1))
             } else{
                 getList()
                 setSearch("")
+                dispatch(setPage(1))
+                dispatch(setFilterKeyword(""))
                 Swal.fire({
                     title: "We couldn't find any task with that title",
                     text: 'Remember that the search is case-sensitive',
@@ -71,6 +75,7 @@ const SearchBar = () => {
                     placeholder="Search"
                     aria-label="Search"
                     aria-describedby="basic-addon2"
+                    value={search}
                     onChange={(e) => handleChange(e)}
                 />
                 <Button variant="outline-success" id="searchButton" type="submit" onClick={handleSubmit}>
