@@ -35,8 +35,13 @@ const TaskListContainer = () => {
                 querySnapshot.forEach((doc) => {
                     docs.push({ ...doc.data(), id: doc.id })
                 })
-
-                dispatch(setTaskList(docs))
+                const parsedDocs = docs.map(d => {
+                    const date = ((d.creation_date).toDate())
+                    const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
+                    const [hour, minutes] = [date.getHours(), date.getMinutes()];
+                    return({...d, creation_date_parsed: `${day}/${month+1}/${year} ${hour}:${minutes<=9 ? "0" : ""}${minutes}`})
+                })
+                dispatch(setTaskList(parsedDocs))
                 setLoading(false)
             } catch (err) {
                 console.log(err)

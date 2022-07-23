@@ -3,9 +3,7 @@ import ListDropdown from './ListDropdown';
 import Avatar from './Avatar';
 
 const TaskItem = ({ t }) => {
-    const date = (((t.creation_date).toDate()))
-    const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
-    const [hour, minutes] = [date.getHours(), date.getMinutes()];
+    
 
     return (
         <>
@@ -14,7 +12,7 @@ const TaskItem = ({ t }) => {
                     <div className='d-flex flex-column justify-content-center align-items-start'>
                         {t.title}
                         <span className='creation-date font-weight-light text-muted'>
-                            Creation date: {`${day}/${month+1}/${year} ${hour}:${minutes<=9 ? "0" : ""}${minutes}`}
+                            Creation date: {t.creation_date_parsed}
                         </span>
                     </div>
                 </td>
@@ -48,7 +46,7 @@ const TaskItem = ({ t }) => {
                             {t.title}
                         </h6>
                         <h6 className='date text-muted'>
-                            Creation date: {`${day}/${month+1}/${year} ${hour}:${minutes<=9 ? "0" : ""}${minutes}`}
+                            Creation date: {t.creation_date_parsed}
                         </h6>
                         <div className='d-flex align-items-center'>
                             <Avatar user={t.assigned_to} />
