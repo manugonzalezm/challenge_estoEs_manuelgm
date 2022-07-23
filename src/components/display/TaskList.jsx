@@ -5,6 +5,7 @@ import {
 import { useSelector } from 'react-redux';
 import TaskItem from './TaskItem';
 import Paginate from './Paginate';
+import TaskItemMobile from './TaskItemMobile';
 
 const TaskList = () => {
     const tasks = useSelector((state) => state.tasks)
@@ -44,7 +45,7 @@ const TaskList = () => {
                         (currentPage - 1) * tasksPerPage + tasksPerPage
                         ).map(t => {
                             return(
-                                <TaskItem key={t.id} t={t} />
+                                <TaskItemMobile key={t.id} t={t} />
                             )
                         }
                     )}
