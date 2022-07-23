@@ -60,8 +60,10 @@ const Header = () => {
             <Navbar className="border-bottom">
                 <Container>
                     {location.pathname==="/" ?
-                        <Navbar.Brand >
-                            My projects
+                        <Navbar.Brand>
+                            <h4 className='m-0'>
+                                My projects
+                            </h4>
                         </Navbar.Brand>
                     : (
                         location.pathname==="/tasks/new" ?
@@ -72,7 +74,9 @@ const Header = () => {
                                     </Button>
                                 </Link>
                                 <Navbar.Brand>
-                                    Add project
+                                    <h4 className='m-0'>
+                                        Add project
+                                    </h4>
                                 </Navbar.Brand>
                             </div>
                         :
@@ -83,7 +87,9 @@ const Header = () => {
                                     </Button>
                                 </Link>
                                 <Navbar.Brand >
-                                    Edit project
+                                    <h4 className='m-0'>
+                                        Edit project
+                                    </h4>
                                 </Navbar.Brand>
                             </div>
                     )
