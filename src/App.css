@@ -42,3 +42,44 @@ a{
     cursor: pointer;
     margin-left: 10px;
 }
+
+.avatar-name{
+    margin-left: 8px;
+}
+
+.list-items-mobile{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.item-mobile{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.item-content-mobile{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+.item-content-mobile *{
+    text-align: left;
+}
+.item-content-mobile .title-mobile{
+    font-weight: 500;
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+.item-content-mobile .date{
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+.assigned-to-mobile{
+    font-weight: normal;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}

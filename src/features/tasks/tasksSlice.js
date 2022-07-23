@@ -4,7 +4,7 @@ const initialState = {
     taskList: [],
     filterKeyword: "",
     currentPage: 1,
-    tasksPerPage: 1
+    tasksPerPage: 5
 }
 
 export const tasksSlice = createSlice({

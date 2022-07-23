@@ -74,7 +74,7 @@ const TaskListContainer = () => {
     console.log(filterKeyword)
 
     return (
-        <div className="bg-light pt-5 list-container">
+        <div className="bg-light pt-4 list-container">
                 {loading ?
                     <div className="d-flex justify-content-center align-items-center mt-3">
                         <Spinner animation="border" />
@@ -82,25 +82,36 @@ const TaskListContainer = () => {
                 :
                     <>
                         {filterKeyword!=="" &&
-                        <h4>
-                            <Badge bg="primary">
-                                Results for: {filterKeyword} 
-                                <FontAwesomeIcon 
-                                    className="reset-search-button"
-                                    onClick={() => handleSearchReset()} 
-                                    icon={faXmark}
-                                />
-                            </Badge>
-                        </h4>
+                        <div className="mx-3 mb-3">
+                            <h4>
+                                <Badge bg="primary">
+                                    Results for: {filterKeyword} 
+                                    <FontAwesomeIcon 
+                                        className="reset-search-button"
+                                        onClick={() => handleSearchReset()} 
+                                        icon={faXmark}
+                                    />
+                                </Badge>
+                            </h4>
+                        </div>
                         }
-                        <Container className="border bg-white shadow px-0">
+                        <Container className="border bg-white shadow px-0 d-none d-md-block">
                             {!loading && (taskList && taskList.length===0) ?
                                 <Alert key="light" variant="light">
                                     No tasks found. To create one go to the 'Add project section'
                                 </Alert>
                             :
-                            <TaskList />
-                        }
+                                <TaskList />
+                            }
+                        </Container>
+                        <Container className="border bg-white shadow px-0 d-block d-md-none" fluid>
+                            {!loading && (taskList && taskList.length===0) ?
+                                <Alert key="light" variant="light">
+                                    No tasks found. To create one go to the 'Add project section'
+                                </Alert>
+                            :
+                                <TaskList />
+                            }
                         </Container>
                     </>
                 }

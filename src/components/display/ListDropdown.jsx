@@ -20,7 +20,7 @@ import { setTaskList } from '../../features/tasks/tasksSlice';
 
 const db = getFirestore(appFirebase);
 
-const ListDropdown = ({ taskId }) => {
+const ListDropdown = ({ taskId, size }) => {
     const dispatch = useDispatch()
 
     const getList = async () => {
@@ -58,7 +58,7 @@ const ListDropdown = ({ taskId }) => {
 
     return (
         <Dropdown drop="end">
-            <Dropdown.Toggle as={Button} variant="outline-light" className="text-dark">
+            <Dropdown.Toggle as={Button} size={size} variant="outline-light" className="text-dark">
                 <FontAwesomeIcon icon={faEllipsisVertical} />
             </Dropdown.Toggle>
 
